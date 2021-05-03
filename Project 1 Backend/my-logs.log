@@ -1,0 +1,48 @@
+Successful logout attempt.
+Successful login attempt by: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View pending reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View all reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+Successful logout attempt.
+Failed login attempt by: Employee [EID=0, username=FinanceMan, password=pass123, firstname=test, lastname=test, managerID=0]
+Successful login attempt by: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View approved reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View pending reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View approved reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+Reimbursement was denied.
+View denied reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+Successful logout attempt.
+Successful login attempt by: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View all reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View pending reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View approved reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View denied reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+View all reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+New reimbursement submitted.
+View pending reimbursements: Employee [EID=1, username=BenTheTrainer, password=pass123, firstname=Benjamin, lastname=Trainerman, managerID=3]
+Successful logout attempt.
+Successful login attempt by: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View pending reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View approved reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View denied reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View all reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View pending reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+New reimbursement submitted.
+View pending reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View approved reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View denied reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+View all reimbursements: Employee [EID=2, username=JonathanG, password=pass123, firstname=Jonathan, lastname=G, managerID=3]
+Successful logout attempt.
+Successful login attempt by: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View all reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View approved reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View denied reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View pending reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+Reimbursement was approved.
+View pending reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View approved reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View pending reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+Reimbursement was denied.
+View denied reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View pending reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+View all reimbursements: Manager [EID=3, username=FinanceMan, password=pass123, firstname=Finance, lastname=Man]
+Successful logout attempt.

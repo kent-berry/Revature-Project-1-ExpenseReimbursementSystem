@@ -1,0 +1,148 @@
+body {
+	background-color: darkgray;
+}
+
+.top-bar {
+	top: 0;
+	width: 100%;
+	background: dodgerblue;
+	color: white;
+}
+
+.top-bar .logo {
+	position: relative;
+	padding: .5rem .7rem;
+	z-index: 4;
+}
+
+.logo h2 {
+	font-size: 22px;
+	text-align: center;
+}
+
+.top-bar-wrapper {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	margin-left: 50px auto;
+	margin-right: 50px auto;
+}
+
+.welcome-msg {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.request-btn {
+	background-color:#666;
+	margin: 20px auto;
+	border-radius: 5px;
+	text-align: center;
+	color: white;
+	cursor: pointer;
+}
+
+.inner-data-box {
+	width: 70%;
+	background: #fff;
+	overflow: hidden;
+	padding: 50px 50px;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.inner-data-box p {
+	text-align: center;
+}
+
+/*Login Page*/
+.parent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+}
+
+.login-outer-box {
+	width: 500px;
+	background: #fff;
+	overflow: hidden;
+	padding: 100px 50px;
+	box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.title {
+	text-align: center;
+	margin-top: 0;
+	padding-bottom: 75px;
+}
+
+input[type=text],
+input[type=password] {
+	font-size: 15px;
+	line-height: 1.5;
+	color: #666;
+	display: block;
+	width: 100%;
+	background: #e6e6e6;
+	height: 50px;
+	padding: 0 30px 0 68px;
+}
+
+.input-wrap {
+	margin-bottom: 10px;
+	width: 100%;
+	justify-content: center;
+}
+
+.button-wrap {
+	padding-top: 20px;
+	flex-wrap: wrap;
+	justify-content: center;
+	text-align: center;
+}
+
+a {
+	text-decoration: none;
+}
+
+.alert {
+	text-align: center;
+}
+
+h3.alert-text {
+	color: red;
+	font-size: 25px;
+	margin-top: 50px;
+	text-align: center;
+}
+
+/*Table*/
+#reimbursementsTable {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+	background-color: #fff;
+	margin-bottom: 50px;
+}
+
+#reimbursementsTable td,
+#reimbursementsTable th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+#reimbursementsTable tr:nth-child(even) {
+	background-color: #fff;
+}
+
+#reimbursementsTable th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color:dodgerblue;
+	color: white;
+}

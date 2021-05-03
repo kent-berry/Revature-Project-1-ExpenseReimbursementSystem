@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Bootstrap-->
+	<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+	</link>
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title> Employee Reimbursement Project </title>
+</head>
+
+<body>
+	<div class="parent">
+		<div class="login-outer-box">
+			<div class="title">
+				<h2> Employee Reimbursement Project </h2>
+			</div>
+			<div class="sign-up">
+			<div class="input-wrap">
+				<label for="username"> Username: </label>
+				<input id="username" name="username" type="text" />
+			</div>
+			<div class="input-wrap">
+				<label for="password"> Password: </label>
+				<input id="password" name="password" type="password" />
+			</div>
+            <div class="radio-btn-box"> <b>Please select your account type: </b>
+                <div class="radio-option">
+                    <input checked="" id="employee" name="employeeType" type="radio" value="employee">
+                    <label for="employee"> Employee </label>
+                    </input>
+                </div>
+            </div>
+                <div class="radio-option">
+                    <input id="manager" name="employeeType" type="radio" value="manager">
+                    <label for="manager"> Manager </label>
+                    </input>
+                </div>
+            </div>
+			<div class="button-wrap">
+				<button class="btn btn-primary" id="loginBtn"> Login </button>
+			</div>
+			<div class="alert">
+				<h3 class="alert-text" id="message">
+				</h3>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script>
+document.getElementById("loginBtn").addEventListener("click", loginTypeSelection);
+function loginTypeSelection() {
+	let employeeBtn = document.getElementById("employee");
+	let managerBtn = document.getElementById("manager");
+	if(employeeBtn.checked == true) {
+		loginAsEmployee();
+	}
+	else if(managerBtn.checked == true) {
+		loginAsManager();
+	}
+}
+async function loginAsEmployee() {
+	let employee = {};
+	employee.EID = 0;
+	employee.username = document.getElementById("username").value;
+	employee.password = document.getElementById("password").value;
+	employee.firstname = "test"
+	employee.lastname = "test"
+	employee.managerID = 0;
+	let settings = {
+		method: 'POST',
+		header: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(employee)
+	}
+	console.log(JSON.stringify(employee));
+	let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeelogin", settings);
+	console.log(httpResponse);
+	let httpResponseStatus = await httpResponse.status;
+	console.log(httpResponseStatus);
+	let message = document.getElementById("message");
+	if(httpResponseStatus == 403) {
+		message.innerHTML = "Your username or password is incorrect, please try again."
+	} else {
+		let employeeData = await httpResponse.json();
+		sessionStorage.setItem("EID", employeeData.EID);
+		sessionStorage.setItem("username", employeeData.username);
+		sessionStorage.setItem("password", employeeData.password);
+		sessionStorage.setItem("firstname", employeeData.firstname);
+		sessionStorage.setItem("lastname", employeeData.lastname);
+		sessionStorage.setItem("managerID", employeeData.managerID);
+		window.location = "http://localhost:8080/EmployeeReimbursementProject/employeepage.html";
+	}
+}
+async function loginAsManager() {
+	let manager = {};
+	manager.EID = 0;
+	manager.username = document.getElementById("username").value;
+	manager.password = document.getElementById("password").value;
+	manager.firstname = "test"
+	manager.lastname = "test"
+	let settings = {
+		method: 'POST',
+		header: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(manager)
+	}
+	let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerlogin", settings);
+	console.log(httpResponse);
+	let httpResponseStatus = await httpResponse.status;
+	console.log(httpResponseStatus);
+	let message = document.getElementById("message");
+	if(httpResponseStatus == 403) {
+		message.innerHTML = "Your username or password is incorrect, please try again."
+	} else {
+		let managerData = await httpResponse.json();
+		sessionStorage.setItem("EID", managerData.EID);
+		sessionStorage.setItem("username", managerData.username);
+		sessionStorage.setItem("password", managerData.password);
+		sessionStorage.setItem("firstname", managerData.firstname);
+		sessionStorage.setItem("lastname", managerData.lastname);
+		window.location = "http://localhost:8080/EmployeeReimbursementProject/managerpage.html";
+	}
+}
+</script>
+
+</html>

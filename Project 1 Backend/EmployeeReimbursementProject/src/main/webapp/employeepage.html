@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Bootstrap-->
+	<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title> ERP - Employee Page </title>
+	</link>
+</head>
+
+<body onload="showGreeting()">
+	<div class="top-bar">
+		<div class="welcome-msg">
+			<h3 id="welcomeMsg">
+			</h3>
+			<h4 id="message">
+			</h4>
+		</div>
+		<div class="logo">
+			<h2> You are logged in as an employee. </h2>
+		</div>
+		<div class="top-bar-wrapper">
+			<button class="request-btn" id="getAll"> View All Requests </button>
+			<button class="request-btn" id="ViewPending"> View Pending Requests </button>
+			<button class="request-btn" id="ViewApproved"> View Approved Requests </button>
+			<button class="request-btn" id="ViewDenied"> View Denied Requests </button>
+			<button class="request-btn" id="LogOut"> Logout </button>
+		</div>
+	</div>
+	<div class="inner-data-box">
+		<table id="reimbursementsTable">
+		</table>
+		<div align="center">
+			<h4>Submit New Expense</h4>
+			<label for="amount"> Amount of expense: </label>
+			<input id="amount" name="amount" type="text" />
+			<label for="description"> Description of expense: </label>
+			<input id="description" name="description" type="text" />
+			<span>
+				<input checked="" id="lodging" name="reimbursementType" type="radio" value="LODGING"><label for="lodging">LODGING</label>
+				<input id="travel" name="reimbursementType" type="radio" value="TRAVEL"><label for="travel">TRAVEL</label>
+				<input id="food" name="reimbursementType" type="radio" value="FOOD"><label for="food">FOOD</label>
+				<input id="other" name="reimbursementType" type="radio" value="OTHER"><label for="other">OTHER</label>
+			</span>
+			</br>
+			</br>
+			<button class="btn btn-primary" id="RSubmit">Submit</button>
+		</div>
+		<br><br>
+	</div>
+</body>
+<script>
+let EID = sessionStorage.getItem("EID");
+let username = sessionStorage.getItem("username");
+let password = sessionStorage.getItem("password");
+let firstname = sessionStorage.getItem("firstname");
+let lastname = sessionStorage.getItem("lastname");
+let managerID = sessionStorage.getItem("managerID");
+if(EID && username && password && firstname && lastname && managerID != null) {
+	document.getElementById("getAll").addEventListener("click", viewAllReimbursementsEmployee);
+	document.getElementById("ViewApproved").addEventListener("click", ViewApprovedRequestsEmployee);
+	document.getElementById("ViewDenied").addEventListener("click", ViewDeniedRequestsEmployee);
+	document.getElementById("ViewPending").addEventListener("click", ViewPendingRequestsEmployee);
+	document.getElementById("LogOut").addEventListener("click", LogOutOfEmployee);
+	document.getElementById("RSubmit").addEventListener("click", submitNewReimbursement);
+	let reimbursement = {};
+	reimbursement.RID = 0;
+	reimbursement.EIDRequester = EID;
+	reimbursement.AMOUNT = 0;
+	reimbursement.DESCRIPTION = "test"
+	reimbursement.TYPE = "test"
+	reimbursement.DATE1 = "test"
+	reimbursement.RSTATUS = "test"
+	reimbursement.RFEEDBACK = "test"
+	let settings = {
+		method: 'POST',
+		header: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(reimbursement)
+	}
+
+	function showGreeting() {
+		let msg = "Welcome, " + firstname + " " + lastname;
+		document.getElementById("welcomeMsg").innerHTML = msg;
+	}
+	async function viewAllReimbursementsEmployee() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/viewAllReimbursementsEmployee", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error 403."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+                        <th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+                 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function ViewApprovedRequestsEmployee() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/viewApprovedReimbursementsEmployee", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function ViewDeniedRequestsEmployee() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/ViewDeniedRequestsEmployee", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function ViewPendingRequestsEmployee() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/ViewPendingRequestsEmployee", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function LogOutOfEmployee() {
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/logout", settings);
+		sessionStorage.removeItem("EID");
+		sessionStorage.removeItem("username");
+		sessionStorage.removeItem("password");
+		sessionStorage.removeItem("firstname");
+		sessionStorage.removeItem("lastname");
+		sessionStorage.removeItem("managerID");
+		window.location = "http://localhost:8080/EmployeeReimbursementProject";
+	}
+	async function submitNewReimbursement() {
+		let lodgingButton = document.getElementById("lodging");
+		let foodButton = document.getElementById("food");
+		let travelButton = document.getElementById("travel");
+		let otherButton = document.getElementById("other");
+		
+		reimbursement.RID = 0;
+		reimbursement.EIDRequester = EID;
+		reimbursement.AMOUNT = document.getElementById("amount").value;
+		reimbursement.DESCRIPTION = document.getElementById("description").value;
+		if (lodgingButton.checked == true){
+			reimbursement.TYPE = "LODGING";
+		} else if (foodButton.checked == true){
+			reimbursement.TYPE = "FOOD";
+		} else if (travelButton.checked == true){
+			reimbursement.TYPE = "TRAVEL";
+		} else if (otherButton.checked == true){
+			reimbursement.TYPE = "OTHER";
+		}
+		reimbursement.RSTATUS = "test";
+		reimbursement.RFEEDBACK = "test";
+		let settings = {
+			method: "PUT",
+			header: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(reimbursement)
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/employeepage/submitNewReimbursement", settings);
+		console.log(httpResponse);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse;
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `<tr><td> Submitted Successfully </td><tr>`;
+		}
+	}
+} else {
+	console.log("no session found");
+	window.location = "http://localhost:8080/EmployeeReimbursementProject";
+}
+</script>
+</html>

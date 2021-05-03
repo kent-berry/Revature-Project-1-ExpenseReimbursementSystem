@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--Bootstrap-->
+	<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+	<link href="stylesheet.css" rel="stylesheet" type="text/css" />
+	<title> ERP - Manager Page </title>
+	</link>
+</head>
+
+<body onload="showGreeting()">
+	<div class="top-bar">
+		<div class="welcome-msg">
+			<h3 id="welcomeMsg">
+			</h3>
+			<h4 id="message">
+			</h4>
+		</div>
+		<div class="logo">
+			<h2> You are logged in as a Manager. </h2>
+		</div>
+		<div class="top-bar-wrapper">
+			<button class="request-btn" id="viewAll"> View all Requests </button>
+			<button class="request-btn" id="viewAllPending"> View Pending Requests </button>
+			<button class="request-btn" id="ViewApproved"> View Approved Requests </button>
+			<button class="request-btn" id="ViewDenied"> View Denied Requests </button>
+			<button class="request-btn" id="LogOut"> Logout </button>
+		</div>
+	</div>
+	<div class="inner-data-box">
+		<table id="reimbursementsTable">
+		</table>
+		<div align="center">
+			<h4>Approve/Deny a Reimbursement</h4>
+			<label for="rID"> Enter the ID of the reimbursement: </label>
+			<input id="rID" name="rID" type="text" />
+			<span><input checked="" id="approve" name="employeeType" type="radio" value="approve"><label for="employee">Approve</label>
+			<input id="deny" name="employeeType" type="radio" value="deny"><label for="employee">Deny</label></span>
+			</br>
+			<label for="rFEEDBACK"> (Optional) Enter feedback for the employee: </label>
+			<input id="rFEEDBACK" name="rFEEDBACK" type="text" />
+			</br>
+			<button class="btn btn-primary" id="RSubmit">Submit</button>
+		</div>
+		<br><br>
+	</div>
+</body>
+<script>
+let EID = sessionStorage.getItem("EID");
+let username = sessionStorage.getItem("username");
+let password = sessionStorage.getItem("password");
+let firstname = sessionStorage.getItem("firstname");
+let lastname = sessionStorage.getItem("lastname");
+if(EID && username && password && firstname && lastname != null) {
+	document.getElementById("viewAll").addEventListener("click", viewAllReimbursementsManager);
+	document.getElementById("viewAllPending").addEventListener("click", viewAllPendingRequestsManager);
+	document.getElementById("ViewApproved").addEventListener("click", viewApprovedRequestsManager);
+	document.getElementById("ViewDenied").addEventListener("click", viewDeniedRequestsManager);
+	document.getElementById("LogOut").addEventListener("click", LogOutOfManager);
+	document.getElementById("RSubmit").addEventListener("click", updateCheck);
+	let reimbursement = {};
+	reimbursement.RID = 111;
+	reimbursement.EIDRequester = 111;
+	reimbursement.AMOUNT = 111;
+	reimbursement.DESCRIPTION = "test"
+	reimbursement.DATE1 = "test"
+	reimbursement.RSTATUS = "test"
+	reimbursement.RFEEDBACK = "test"
+	let settings = {
+		method: 'POST',
+		header: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(reimbursement)
+	}
+
+	function showGreeting() {
+		let msg = "Welcome, " + firstname + " " + lastname;
+		document.getElementById("welcomeMsg").innerHTML = msg;
+	}
+
+	function updateCheck() {
+		let approveSelection = document.getElementById("approve");
+		let denySelection = document.getElementById("deny");
+		if(approveSelection.checked == true) {
+			updateApprove();
+		}
+		if(denySelection.checked == true) {
+			updateDeny();
+		}
+	}
+	async function updateApprove() {
+		reimbursement.RID = document.getElementById("rID").value;;
+		reimbursement.RSTATUS = "approve";
+		reimbursement.RFEEDBACK = document.getElementById("rFEEDBACK").value;
+		let settings = {
+			method: "POST",
+			header: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(reimbursement)
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/updateApproveReimbursement", settings);
+		console.log(httpResponse);
+		let httpResponseStatus = await httpResponse.status;
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse;
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `<tr><td> Approved Successfully </td><tr>`;
+		}
+	}
+	async function updateDeny() {
+		reimbursement.RID = document.getElementById("rID").value;
+		reimbursement.RSTATUS = "deny";
+		reimbursement.RFEEDBACK = document.getElementById("rFEEDBACK").value;
+		let settings = {
+			method: "POST",
+			header: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(reimbursement)
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/updateDenyReimbursement", settings);
+		console.log(httpResponse);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse;
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `<tr><td> Denied Successfully </td><tr>`;
+		}
+	}
+	async function viewAllReimbursementsManager() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/viewAllReimbursementsManager", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>REQUESTED BY</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+                        <th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>${rImb.EIDRequester}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+                 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function viewAllPendingRequestsManager() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/viewAllPendingRequestsManager", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>REQUESTED BY</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>${rImb.EIDRequester}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function viewApprovedRequestsManager() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/viewApprovedRequestsManager", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>REQUESTED BY</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>${rImb.EIDRequester}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function viewDeniedRequestsManager() {
+		let settings = {
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json'
+			}
+		}
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/viewDeniedRequestsManager", settings);
+		let httpResponseStatus = await httpResponse.status;
+		console.log(httpResponseStatus);
+		let message = document.getElementById("message");
+		if(httpResponseStatus == 403) {
+			message.innerHTML = "Error."
+		} else {
+			let reimburseData = await httpResponse.json();
+			let tableData = document.getElementById("reimbursementsTable");
+			tableData.innerHTML = "";
+			tableData.innerHTML = `
+                <thead><tr>
+                        <th>ID</th>
+                        <th>REQUESTED BY</th>
+                        <th>AMOUNT</th>
+						<th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th>DATE</th>
+						<th>STATUS</th>
+                        <th>FEEDBACK</th>
+                </tr></thead>
+                `;
+			for(rImb of reimburseData) {
+				tableData.innerHTML = tableData.innerHTML + `<tr>
+                 <td>${rImb.RID}</td>
+                 <td>${rImb.EIDRequester}</td>
+                 <td>$${rImb.AMOUNT}</td>
+				 <td>${rImb.TYPE}</td>
+                 <td>${rImb.DESCRIPTION}</td>
+                 <td>${rImb.DATE1}</td>
+				 <td>${rImb.RSTATUS}</td>
+                 <td>${rImb.RFEEDBACK}</td>
+                 </tr>`;
+			}
+		}
+	}
+	async function LogOutOfManager() {
+		settings.method = 'POST';
+		let httpResponse = await fetch("http://localhost:8080/EmployeeReimbursementProject/api/managerpage/logout", settings);
+		sessionStorage.removeItem("EID");
+		sessionStorage.removeItem("username");
+		sessionStorage.removeItem("password");
+		sessionStorage.removeItem("firstname");
+		sessionStorage.removeItem("lastname");
+		window.location = "http://localhost:8080/EmployeeReimbursementProject";
+	}
+} else {
+	console.log("no session found-everything is null");
+	window.location = "http://localhost:8080/EmployeeReimbursementProject";
+}
+</script>
+
+</html>
