@@ -21,11 +21,12 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 ## Features
 
 Employees can:
-* Submit a new reimbursement with an amount, a description, and a type (LODGING, FOOD, 
-
+* Submit a new reimbursement with an amount, a description, and a type (LODGING, FOOD, TRAVEL, or OTHER)
+* View their past reimbursement requests and filter by status (Pending, Approved, or Denied)
 
 Managers can:
-
+* Approve or Deny reimbursement requests and add feedback to the request to explain further
+* View past reimbursement requests from all users and filter by status (Pending, Approved, or Denied)
 
 ## Screenshots
 
