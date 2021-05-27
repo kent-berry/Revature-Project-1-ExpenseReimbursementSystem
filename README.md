@@ -19,20 +19,25 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 * Log4j
   
 ## Features
-With OnIt, a user can:
 
-* Register for an account.
-* Sign in to a user home page displaying a filterable (by category, by whether it has been completed) grid list of their tasks.
-* Create and edit a task with a name, description, due date, category label, (optional) location via Google Maps and can (optionally) be marked as repeatable. 
-  Each task also has an option to send an email reminder to the user one day before its due date.
-* View their "Task Stats", where a curve graph shows them how many tasks they've completed over the past n days, where they specify n via a dropdown box.
-* Download their task list to a file.
-* Update their account information, or delete their account.
+Employees can:
+* Submit a new reimbursement with an amount, a description, and a type (LODGING, FOOD, 
 
-To-do's:
-* Allow users to specify their own category label for a task instead of (only) offering a set list of choices,
-* Show additional data related to user productivity on the "Task Stats" page.
-* Send email to a user when they register.
+
+Managers can:
+
+
+## Screenshots
+
+Login Page:
+![image](https://user-images.githubusercontent.com/81493135/119753132-392e1980-be6c-11eb-8203-d53ee348f942.png)
+
+Employee Page:
+![image](https://user-images.githubusercontent.com/81493135/119754566-b3f83400-be6e-11eb-8026-a5921c9a96bb.png)
+
+Manager Page:
+![image](https://user-images.githubusercontent.com/81493135/119754746-e144e200-be6e-11eb-892c-7d414e972cbf.png)
+
 
 ## Contributors
 Kent Berry, Dieudonne Muhirwa
